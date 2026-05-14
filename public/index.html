@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Mira — a quiet, private cycle companion." />
+  <title>Mira</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='none' stroke='%23333' stroke-width='3'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --bg: #fafaf7;
+      --ink: #1a1a1a;
+      --muted: #6a6a6a;
+      --line: #e5e3dd;
+      --accent: #2a2a2a;
+      --field: #ffffff;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: ui-serif, Georgia, 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    [dir="rtl"] body { font-family: ui-serif, 'Amiri', 'Noto Naskh Arabic', serif; }
+
+    .lang-switch {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      gap: 0.5rem;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.75rem;
+    }
+
+    [dir="rtl"] .lang-switch { right: auto; left: 1.5rem; }
+
+    .lang-switch button {
+      background: none;
+      border: 1px solid var(--line);
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      border-radius: 2px;
+    }
+
+    .lang-switch button.active {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    main {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem 3rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      letter-spacing: 0.3em;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+    }
+
+    [dir="rtl"] .logo { letter-spacing: 0; }
+
+    .tagline {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 3rem;
+      font-style: italic;
+    }
+
+    .intro {
+      margin-bottom: 2.5rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .intro p { margin-bottom: 0.8rem; }
+
+    form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    label {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    input[type="email"],
+    input[type="date"],
+    input[type="number"],
+    select {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.8rem 1rem;
+      border: 1px solid var(--line);
+      background: var(--field);
+      color: var(--ink);
+      border-radius: 2px;
+      width: 100%;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--ink);
+    }
+
+    .hint {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .consent {
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.8rem;
+      color: var(--muted);
+      padding: 1rem;
+      background: rgba(0,0,0,0.02);
+      border-radius: 2px;
+    }
+
+    .consent input { margin-top: 0.2rem; }
+
+    .consent a { color: var(--ink); text-decoration: underline; }
+
+    button[type="submit"] {
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      padding: 1rem;
+      background: var(--ink);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    button[type="submit"]:hover { background: var(--accent); }
+    button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .footer-note {
+      text-align: center;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-note a { color: var(--muted); margin: 0 0.5rem; }
+
+    .quick-exit {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: #c0392b;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 3px;
+      font-family: ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.75rem;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+    }
+
+    [dir="rtl"] .quick-exit { right: auto; left: 1rem; }
+
+    .message {
+      padding: 1rem;
+      border-radius: 2px;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .message.success {
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      color: #2e7d32;
+    }
+
+    .message.error {
+      background: #fdecea;
+      border: 1px solid #f5b7b1;
+      color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button data-lang="en" class="active">EN</button>
+    <button data-lang="ko">한국어</button>
+    <button data-lang="ar">العربية</button>
+  </div>
+
+  <main>
+    <div class="logo" data-i18n="logo">MIRA</div>
+    <div class="tagline" data-i18n="tagline">a quiet companion</div>
+
+    <div class="intro">
+      <p data-i18n="intro_1">Mira sends you one private email when your cycle expects you. No app to install. No notifications on your phone. No data shared.</p>
+      <p data-i18n="intro_2">Tell us your last period date. We'll send a calendar view of what's likely next.</p>
+    </div>
+
+    <form id="signup-form" novalidate>
+      <div class="field">
+        <label for="email" data-i18n="label_email">Your email</label>
+        <input type="email" id="email" name="email" required autocomplete="email" />
+      </div>
+
+      <div class="field">
+        <label for="last_period" data-i18n="label_last_period">First day of your last period</label>
+        <input type="date" id="last_period" name="last_period" required />
+      </div>
+
+      <div class="field">
+        <label for="cycle_length" data-i18n="label_cycle_length">Average cycle length (days)</label>
+        <input type="number" id="cycle_length" name="cycle_length" value="28" min="21" max="35" required />
+        <div class="hint" data-i18n="hint_cycle_length">Most people fall between 21 and 35 days. Use 28 if you're not sure.</div>
+      </div>
+
+      <div class="field">
+        <label for="lead_time" data-i18n="label_lead_time">Period reminder lead time</label>
+        <select id="lead_time" name="lead_time">
+          <option value="1" data-i18n="lead_1">1 day before</option>
+          <option value="3" data-i18n="lead_3" selected>3 days before</option>
+          <option value="5" data-i18n="lead_5">5 days before</option>
+          <option value="7" data-i18n="lead_7">7 days before</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="partner_email" data-i18n="label_partner">Partner email (optional)</label>
+        <input type="email" id="partner_email" name="partner_email" autocomplete="off" />
+        <div class="hint" data-i18n="hint_partner">If you add a partner, they'll get a separate consent email first. They'll receive only fertile and ovulation alerts — never your period reminder.</div>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" id="consent" required />
+        <span data-i18n="consent_text">I understand Mira stores my email and cycle dates only, and that the predictions are estimates — not a contraception or fertility method. I can delete my data any time via the link in every email.</span>
+      </label>
+
+      <button type="submit" id="submit-btn" data-i18n="submit_btn">Begin</button>
+
+      <div id="message" class="message" style="display: none;"></div>
+    </form>
+
+    <div class="footer-note">
+      <a href="/privacy" data-i18n="link_privacy">Privacy</a> ·
+      <a href="/resources" data-i18n="link_resources">Resources</a> ·
+      <a href="/about" data-i18n="link_about">About</a>
+    </div>
+  </main>
+
+  <button class="quick-exit" onclick="window.location.href='https://www.bbc.co.uk/weather'" data-i18n="quick_exit">EXIT</button>
+
+  <script>
+    const translations = {
+      en: {
+        logo: "MIRA",
+        tagline: "a quiet companion",
+        intro_1: "Mira sends you one private email when your cycle expects you. No app to install. No notifications on your phone. No data shared.",
+        intro_2: "Tell us your last period date. We'll send a calendar view of what's likely next.",
+        label_email: "Your email",
+        label_last_period: "First day of your last period",
+        label_cycle_length: "Average cycle length (days)",
+        hint_cycle_length: "Most people fall between 21 and 35 days. Use 28 if you're not sure.",
+        label_lead_time: "Period reminder lead time",
+        lead_1: "1 day before",
+        lead_3: "3 days before",
+        lead_5: "5 days before",
+        lead_7: "7 days before",
+        label_partner: "Partner email (optional)",
+        hint_partner: "If you add a partner, they'll get a separate consent email first. They'll receive only fertile and ovulation alerts — never your period reminder.",
+        consent_text: "I understand Mira stores my email and cycle dates only, and that the predictions are estimates — not a contraception or fertility method. I can delete my data any time via the link in every email.",
+        submit_btn: "Begin",
+        link_privacy: "Privacy",
+        link_resources: "Resources",
+        link_about: "About",
+        quick_exit: "EXIT",
+        msg_success: "Check your email. We've sent your first cycle view.",
+        msg_error: "Something went wrong. Please try again.",
+        msg_consent_required: "Please tick the consent box to continue.",
+      },
+      ko: {
+        logo: "MIRA",
+        tagline: "조용한 동반자",
+        intro_1: "Mira는 주기가 다가오면 비공개 이메일 한 통을 보냅니다. 앱 설치도, 휴대폰 알림도, 데이터 공유도 없습니다.",
+        intro_2: "최근 생리 시작일만 알려주세요. 다음 주기 예상을 캘린더 형식으로 보내드립니다.",
+        label_email: "이메일",
+        label_last_period: "최근 생리 시작일",
+        label_cycle_length: "평균 주기 (일)",
+        hint_cycle_length: "보통 21~35일 사이입니다. 잘 모르시면 28을 사용하세요.",
+        label_lead_time: "생리 알림 시점",
+        lead_1: "1일 전",
+        lead_3: "3일 전",
+        lead_5: "5일 전",
+        lead_7: "7일 전",
+        label_partner: "파트너 이메일 (선택)",
+        hint_partner: "파트너를 추가하면 먼저 별도의 동의 이메일이 발송됩니다. 파트너는 가임기와 배란일 알림만 받으며, 생리 알림은 절대 받지 않습니다.",
+        consent_text: "Mira는 제 이메일과 주기 날짜만 저장하며, 예측은 추정치일 뿐 피임이나 임신 계획 수단이 아님을 이해합니다. 모든 이메일의 링크를 통해 언제든 데이터를 삭제할 수 있습니다.",
+        submit_btn: "시작하기",
+        link_privacy: "개인정보",
+        link_resources: "자료",
+        link_about: "소개",
+        quick_exit: "나가기",
+        msg_success: "이메일을 확인해주세요. 첫 주기 예측을 보내드렸습니다.",
+        msg_error: "문제가 발생했습니다. 다시 시도해주세요.",
+        msg_consent_required: "계속하려면 동의 박스에 체크해주세요.",
+      },
+      ar: {
+        logo: "ميرا",
+        tagline: "رفيقة هادئة",
+        intro_1: "ترسل ميرا رسالة بريد إلكتروني خاصة واحدة عندما تقترب دورتك. لا تطبيق للتثبيت. لا إشعارات على هاتفك. لا مشاركة للبيانات.",
+        intro_2: "أخبرينا بتاريخ آخر دورة لك. سنرسل لك عرضًا تقويميًا لما هو متوقع.",
+        label_email: "بريدك الإلكتروني",
+        label_last_period: "اليوم الأول من آخر دورة لك",
+        label_cycle_length: "متوسط طول الدورة (أيام)",
+        hint_cycle_length: "معظم الدورات بين ٢١ و ٣٥ يومًا. استخدمي ٢٨ إذا لم تكوني متأكدة.",
+        label_lead_time: "وقت التذكير قبل الدورة",
+        lead_1: "قبل يوم واحد",
+        lead_3: "قبل ٣ أيام",
+        lead_5: "قبل ٥ أيام",
+        lead_7: "قبل ٧ أيام",
+        label_partner: "البريد الإلكتروني للشريك (اختياري)",
+        hint_partner: "إذا أضفت شريكًا، فسيتلقى رسالة موافقة منفصلة أولاً. سيتلقى فقط تنبيهات نافذة الخصوبة والإباضة — لن يتلقى أبدًا تذكير الدورة.",
+        consent_text: "أفهم أن ميرا تخزن بريدي الإلكتروني وتواريخ دورتي فقط، وأن التنبؤات تقديرية — وليست وسيلة لمنع الحمل أو لتنظيمه. يمكنني حذف بياناتي في أي وقت عبر الرابط في كل بريد.",
+        submit_btn: "ابدئي",
+        link_privacy: "الخصوصية",
+        link_resources: "موارد",
+        link_about: "حول",
+        quick_exit: "خروج",
+        msg_success: "تفقدي بريدك الإلكتروني. أرسلنا لك أول عرض للدورة.",
+        msg_error: "حدث خطأ ما. حاولي مرة أخرى.",
+        msg_consent_required: "يرجى تحديد مربع الموافقة للمتابعة.",
+      },
+    };
+
+    let currentLang = "en";
+
+    function detectLanguage() {
+      const stored = localStorage.getItem("mira_lang");
+      if (stored && translations[stored]) return stored;
+      const browser = (navigator.language || "en").toLowerCase().split("-")[0];
+      if (translations[browser]) return browser;
+      return "en";
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang;
+      const t = translations[lang];
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key] !== undefined) el.textContent = t[key];
+      });
+
+      document.querySelectorAll(".lang-switch button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+
+      try { localStorage.setItem("mira_lang", lang); } catch (e) {}
+    }
+
+    document.querySelectorAll(".lang-switch button").forEach(btn => {
+      btn.addEventListener("click", () => applyLanguage(btn.dataset.lang));
+    });
+
+    applyLanguage(detectLanguage());
+
+    const form = document.getElementById("signup-form");
+    const messageEl = document.getElementById("message");
+    const submitBtn = document.getElementById("submit-btn");
+
+    function showMessage(text, kind) {
+      messageEl.textContent = text;
+      messageEl.className = "message " + kind;
+      messageEl.style.display = "block";
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const t = translations[currentLang];
+
+      if (!document.getElementById("consent").checked) {
+        showMessage(t.msg_consent_required, "error");
+        return;
+      }
+
+      const payload = {
+        email: document.getElementById("email").value.trim(),
+        last_period: document.getElementById("last_period").value,
+        cycle_length: parseInt(document.getElementById("cycle_length").value, 10),
+        lead_time: parseInt(document.getElementById("lead_time").value, 10),
+        partner_email: document.getElementById("partner_email").value.trim() || null,
+        language: currentLang,
+      };
+
+      submitBtn.disabled = true;
+
+      try {
+        const res = await fetch("/api/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMessage(t.msg_success, "success");
+          form.reset();
+        } else {
+          showMessage(data.error || t.msg_error, "error");
+        }
+      } catch (err) {
+        showMessage(t.msg_error, "error");
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
