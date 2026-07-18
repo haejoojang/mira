@@ -1,10 +1,9 @@
 {
-  "name": "mira",
-  "version": "0.1.0",
+  "name": "mira-v1",
+  "version": "1.0.0",
   "private": true,
-  "description": "A quiet, privacy-first cycle companion.",
-  "type": "module",
+  "description": "Mira — a privacy-first diary for period, fertility, and body-related logging.",
   "dependencies": {
-    "resend": "^4.0.0"
+    "@supabase/supabase-js": "^2.45.0"
   }
 }
