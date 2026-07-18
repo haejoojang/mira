@@ -1,88 +1,138 @@
-# Mira
-
-> A quiet, privacy-first cycle companion.
-
-Mira sends one private email when your cycle expects you. No app to install. No notifications on your phone. No data shared. No symptom logging. No mood tracking. No advertisers.
-
-You give Mira the first day of your last period. Mira sends you a calendar view of what's likely next — and stays quiet until those days arrive.
-
+Mira
+> A quiet, privacy-first diary for your body.
+Mira is a diary, not a tracker. You log period dates, symptoms, sex, mood, or
+anything body-related — by typing, tapping, or simply replying to an email —
+and Mira turns that into private cycle predictions. No app to install, no push
+notifications, no ads, no data sold.
 ---
-
-## Why this exists
-
-Mainstream period-tracking apps treat your reproductive health like a data asset: maximalist symptom logging, ad-supported business models, partner-sharing features that turn intimate information into shared property, and visual design that announces *exactly* what the app is doing on your phone.
-
-For most users that's fine. For some users — women in coercive relationships, refugees, women in jurisdictions where reproductive autonomy is contested, women who simply want quiet — it's a real problem.
-
-Mira is the opposite product. It is deliberately minimal. The smallest amount of data, the smallest amount of attention, the smallest amount of trust required.
-
+Who this is for
+Two audiences, one product:
+Women with limited time or resources — including refugee women who need
+accessible, judgment-free reproductive health information and a way to
+understand their own cycle and birth control without a clinic visit.
+Busy professional women who want a discreet, ad-free alternative to
+mainstream trackers — no cute stickers, no gamification, no notifications
+announcing what the app is for to anyone glancing at a phone.
 ---
-
-## Design principles
-
-1. **Privacy by default, not by setting.** No symptom logging, no mood tracking, no longitudinal medical record. We store your email, your last period date, your cycle length, your preferred reminder lead time, and your language. Nothing else.
-2. **Email-only delivery.** No native app means no app icon on your phone, no push notifications, no app store history. Anyone glancing at your phone sees nothing.
-3. **Quiet by default.** After signup, Mira sends three emails per cycle: fertile window start, ovulation day, period reminder. That's it.
-4. **Honest about what we can and cannot predict.** Cycle math is arithmetic, not medicine. Every email says so. Mira is not a contraception method and not a fertility-planning tool.
-5. **Language barrier free.** English, Korean, and Arabic at launch. Arabic includes right-to-left layout. Resources page translated first, signup form translated second.
-6. **Optional partner cc, with consent.** A user can add a partner's email. The partner receives a separate consent email *first* and must confirm before getting anything else. The partner receives only fertile and ovulation alerts — never the period reminder.
-7. **Survivor-safe.** Abuse helpline information lives on the resources page, never in the body of emails. The website has a quick-exit button. Emails never contain language that would alarm someone reading over a shoulder.
-
+Why "diary," not "tracker"
+The name and framing are a deliberate safety choice, not just branding. An
+email thread or app called "diary" is safe to have visible on a shared device.
+One called "period tracker" or "birth control reminders" can itself put someone
+at risk — for a woman in a coercive relationship, that label can be the danger,
+not the data. Every design decision in Mira follows from this.
 ---
-
-## What Mira is not
-
-- Not Flo. Not Clue. Not Glow. Not a fertility planner. Not a contraceptive.
-- Not a medical device.
-- Not a replacement for a clinician.
-- Not a longitudinal health record.
-- Not free of error — calendar-method estimates are approximate. The disclaimer is in every email for a reason.
-
+What Mira remembers — and what it doesn't
+This is the core of the product, so it's stated plainly:
+Mira keeps: your email address, and the dates and category of what you log
+(period start/end, symptom, mood, spotting, medication, sex). That's what
+predictions need.
+Mira does not keep: what you actually wrote. When you log something — by
+typing in the web diary or replying to an email — that text is read once, just
+long enough to extract a date and a category, and is never stored, logged, or
+reviewed afterward. The full entry lives on in your own inbox, not ours.
+This is a different claim than "we encrypt everything." Encryption protects
+data from outsiders; it doesn't stop us from reading it. Mira's promise is that
+there's nothing detailed to read in the first place — we couldn't hand over
+your diary in a breach, because we never had it.
 ---
-
-## Architecture (v0.1)
-
+How you use it
+Type or tap to log. A search-bar style input in the web diary accepts
+plain sentences ("had sex, no protection," "cramps today") or, for days you
+don't feel like writing, a quiet grid of plain-text buttons — no bright
+colors, no stickers.
+Reply to any Mira email to log the same way, from any device, without
+opening the web view at all.
+Ask questions in the same bar — "when's my next period," "is today my
+fertile window" — answered from your own computed cycle data.
+Calendar view of logged history plus predicted period, fertile window,
+and ovulation.
+Add to your phone's calendar (iPhone, Android, Google Calendar) via a
+private subscription link. Events are deliberately vague ("Mira reminder")
+since calendar apps often sync to a cloud outside Mira's control.
+Pull a clinic-visit summary — your period history as a clean, printable
+table (start date, end date, duration, cycle length) for a doctor's
+appointment, generated from stored dates only.
+---
+What Mira sends you
+Event-triggered emails only — never a daily check-in. A reminder before an
+expected period or fertile window (lead time you choose: 1/3/5/7 days), and a
+brief confirmation right after you log something. Silence otherwise. Frequent
+emails from a period-related sender can itself be risky in an unsafe household,
+so the inbox stays calm on purpose.
+---
+Sharing — owner-initiated only
+(Planned, not yet built.) A future option will let an account owner invite
+someone — a parent, a partner, a trusted person — to see a view-only
+calendar. Deliberately narrow, to avoid becoming the surveillance mechanism the
+rest of Mira is designed to prevent:
+Only the account owner can invite a viewer. A viewer can never request or
+initiate access.
+View-only — a shared viewer never sees diary text, only dates.
+Not retroactive — access starts from the day it's granted, not the full
+history.
+Revocable any time, only by the account owner.
+This is separate from the existing partner alert feature (below) and won't
+be merged into it, since they solve different problems.
+---
+Partner alerts (existing)
+A user can optionally add a partner's email. The partner receives a separate
+consent email first and must confirm before anything else is sent. They then
+receive only fertile-window and ovulation alerts — never the period reminder,
+and never diary content.
+---
+Multilingual
+English, Korean, and Arabic (with right-to-left layout). The resources page is
+translated first, the signup and diary interface second.
+---
+Survivor-safe by design
+Abuse and crisis helpline information lives on a dedicated resources page —
+never inside an email body, where it could be seen by someone else.
+A quick-exit option on the web pages.
+Neutral language throughout — nothing that would alarm someone reading over
+a shoulder.
+Calendar exports use vague event titles, never specifics.
+---
+What Mira is not
+Not Flo, Clue, or Glow. Not a fertility-planning tool. Not a contraceptive.
+Not a medical device, and not a replacement for a clinician.
+Not a native app — deliberately. No app-store account, no icon
+advertising what it's for, no push notifications. This may be revisited if
+real demand for a native app emerges, but isn't the starting assumption.
+Not free of error — cycle predictions are estimates from your own history,
+not medicine. Every prediction says so.
+---
+Architecture
 ```
-public/index.html        Signup form (static, multilingual, RTL-ready)
-api/signup.js            Vercel serverless function: validates input,
-                         calculates cycle, sends welcome email via Resend
-package.json             Dependencies
-vercel.json              Vercel config
+public/index.html      Email-only signup (passwordless magic link)
+public/diary.html       Type/tap logging, search bar, calendar
+public/summary.html     Printable clinic-visit history
+api/inbound-email.js    Parses diary email replies, discards raw text
+api/ask.js               Powers the web diary's search bar
+api/reminders.js         Daily check, event-triggered emails only
+api/calendar.js           .ics feed for phone calendar subscription
+api/summary.js            Clinic summary data
+supabase-schema.sql        Minimal schema: dates + category only, RLS-enforced
 ```
-
-**v0.1 is stateless.** It calculates a user's cycle on the fly and sends one welcome email. There is no database yet.
-
-**v0.2 will add:**
-- Supabase for storing signups (so the cron has someone to email)
-- A daily cron job (GitHub Actions) that checks who needs an email today
-- The three scheduled emails per cycle
-- Partner consent flow
-- One-click unsubscribe + data deletion
-- Privacy notice page
-- Resources page
-
+Stack: Supabase (database + passwordless auth + row-level security), Vercel
+(serverless functions + hosting + cron), Resend (transactional + inbound
+email), Claude API (natural-language entry parsing, used transiently — see
+"What Mira remembers" above).
+See `README-setup.md` (or the setup section of this file, in earlier versions)
+for exact deployment steps.
 ---
-
-## Deploying v0.1
-
-1. Push this repo to GitHub.
-2. Sign up at [vercel.com](https://vercel.com) → "New Project" → import this repo.
-3. Sign up at [resend.com](https://resend.com) → create an API key.
-4. In Vercel project settings → Environment Variables, add:
-   - `RESEND_API_KEY` — your Resend API key
-   - `MIRA_FROM_EMAIL` — optional; format `"Mira <you@yourdomain.com>"`. If omitted, Resend's testing address is used (which only sends to your verified email).
-5. Deploy. Vercel gives you a URL like `mira-xxx.vercel.app`.
-
-To send to real users, you must verify a domain with Resend. Until then, Mira will only deliver to your own verified email — which is the right way to test.
-
+What's deliberately deferred
+SMS logging for lower-connectivity users — email already works on very
+weak connections, but SMS would reach feature phones with no data plan at
+all. Needs a paid SMS gateway; a real v2 idea, not v1.
+True offline access — not possible with an email-based architecture,
+since sending requires connectivity. What's built instead is low-bandwidth
+resilience: plain-text emails, minimal typing via tap-to-log.
+Native app — see "What Mira is not," above.
+Automated data export/delete-my-account flow — handled manually for a
+small trial; needed before any wider release.
+License — to be decided. Likely MIT for code, CC-BY for translations
+and copy.
 ---
-
-## What's deliberately deferred
-
-v0.1 accepts the partner email and lead time from the form but does not yet use them. They are stored only when v0.2 adds a database. This is on purpose: ship the smallest thing that proves the architecture, then layer on.
-
----
-
-## License
-
-To be decided. Likely MIT for code, CC-BY for translations and copy.
+Status
+Early trial — built for personal use and a small group of friends testing it,
+not a public launch.
