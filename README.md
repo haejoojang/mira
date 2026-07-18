@@ -141,4 +141,42 @@ translated first, the signup and diary interface second.
 
 ---
 
+Stack: Supabase (database + passwordless auth + row-level security), Vercel
+(serverless functions + hosting + cron), Resend (transactional + inbound
+email), Claude API (natural-language entry parsing, used transiently — see
+"What Mira remembers" above).
+
+---
+
+## What's deliberately deferred
+
+- **SMS logging** for lower-connectivity users — email already works on very
+  weak connections, but SMS would reach feature phones with no data plan at
+  all. Needs a paid SMS gateway; a real v2 idea, not v1.
+- **True offline access** — not possible with an email-based architecture,
+  since sending requires connectivity. What's built instead is low-bandwidth
+  resilience: plain-text emails, minimal typing via tap-to-log.
+- **Native app** — see "What Mira is not," above.
+- **Automated data export/delete-my-account flow** — handled manually for a
+  small trial; needed before any wider release.
+- **License** — to be decided. Likely MIT for code, CC-BY for translations
+  and copy.
+
+---
+
+## Status
+
+Early trial — built for personal use and a small group of friends testing it,
+not a public launch.
+
 ## Architecture
+
+public/index.html      Email-only signup (passwordless magic link)
+public/diary.html       Type/tap logging, search bar, calendar
+public/summary.html     Printable clinic-visit history
+api/inbound-email.js    Parses diary email replies, discards raw text
+api/ask.js               Powers the web diary's search bar
+api/reminders.js         Daily check, event-triggered emails only
+api/calendar.js           .ics feed for phone calendar subscription
+api/summary.js            Clinic summary data
+supabase-schema.sql        Minimal schema: dates + category only, RLS-enforced
