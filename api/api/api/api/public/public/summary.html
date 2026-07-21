@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mira — cycle summary</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@0,400;0,500&family=Inter:wght@400;500;600&display=swap');
+  :root{ --cream:#F7F2EA; --ink:#2B241F; --ink-soft:#6E6356; --line:#E5DCCC; --terracotta:#BE6E4D; }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--cream); color:var(--ink); font-family:'Inter',sans-serif; padding:40px 20px;}
+  .wrap{max-width:640px; margin:0 auto;}
+  .head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:6px;}
+  .wordmark{font-family:'Source Serif 4',serif; font-style:italic; font-size:22px;}
+  .print-btn{font-size:12px; border:1px solid var(--line); background:#fff; padding:8px 14px; border-radius:8px; cursor:pointer;}
+  .sub{color:var(--ink-soft); font-size:13px; margin-bottom:24px;}
+  table{width:100%; border-collapse:collapse; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,.04);}
+  th,td{padding:12px 14px; text-align:left; font-size:13.5px; border-bottom:1px solid var(--line);}
+  th{background:var(--terracotta); color:#fff; font-weight:500;}
+  tr:last-child td{border-bottom:none;}
+  .empty{text-align:center; padding:60px 0; color:var(--ink-soft);}
+  @media print { .print-btn{display:none;} body{background:#fff;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <span class="wordmark">mira</span>
+    <button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+  </div>
+  <p class="sub">Cycle history — useful to bring to a clinic or doctor's visit.</p>
+  <div id="content"><p class="empty">Loading…</p></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function load(){
+  const { data: { session } } = await supabase.auth.getSession();
+  if(!session){ window.location.href = '/index.html'; return; }
+
+  const res = await fetch('/api/summary', { headers: { Authorization: `Bearer ${session.access_token}` } });
+  const { rows } = await res.json();
+  const content = document.getElementById('content');
+
+  if(!rows || rows.length===0){ content.innerHTML = '<p class="empty">No period entries logged yet.</p>'; return; }
+
+  content.innerHTML = `<table>
+    <thead><tr><th>Start date</th><th>End date</th><th>Duration</th><th>Cycle</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr>
+      <td>${r.start}</td><td>${r.end || '—'}</td><td>${r.duration ? r.duration+'d' : '—'}</td><td>${r.cycle ? r.cycle+'d' : '—'}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+load();
+</script>
+</body>
+</html>
